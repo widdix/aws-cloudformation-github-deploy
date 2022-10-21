@@ -131,8 +131,9 @@ export async function run(): Promise<void> {
       }
     }
   } catch (err) {
-    core.setFailed(err.message)
-    core.debug(err.stack)
+    if (err instanceof Error || typeof err === 'string') {
+      core.setFailed(err)
+    }
   }
 }
 

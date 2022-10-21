@@ -112,7 +112,7 @@ async function getStack(
       .promise()
     return stacks.Stacks?.[0]
   } catch (e) {
-    if (e.code === 'ValidationError' && e.message.match(/does not exist/)) {
+    if (e instanceof Error && e.message.match(/does not exist/)) {
       return undefined
     }
     throw e
