@@ -5,15 +5,21 @@ on:
 
 name: Package
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   check:
     name: Package distribution file
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          ref: master
+          node-version: 16
+          cache: npm
       - name: Package
         run: |
           npm ci

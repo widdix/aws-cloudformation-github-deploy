@@ -1,18 +1,18 @@
 {
   "name": "aws-actions-aws-cloudformation-github-deploy",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "description": "Deploys a AWS CloudFormation stack",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
     "pack": "ncc build",
-    "precommit": "lint-staged",
+    "lint": "lint-staged",
     "test": "DEBUG=jest eslint **/*.ts && jest --coverage --verbose",
     "all": "npm run build && npm run precommit && npm run pack && npm test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/aws-actions/aws-cloudformation-github-deploy.git"
+    "url": "git+https://github.com/widdix/aws-cloudformation-github-deploy.git"
   },
   "keywords": [
     "AWS",
@@ -21,39 +21,36 @@
     "JavaScript"
   ],
   "author": "AWS",
+  "contributors": [{
+    "name": "Michael Wittig",
+    "email" : "michael@widdix.de"
+  }],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/aws-actions/aws-cloudformation-github-deploy/issues"
+    "url": "https://github.com/widdix/aws-cloudformation-github-deploy/issues"
   },
-  "homepage": "https://github.com/aws-actions/aws-cloudformation-github-deploy#readme",
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run precommit",
-      "pre-push": "npm run test"
-    }
-  },
+  "homepage": "https://github.com/widdix/aws-cloudformation-github-deploy#readme",
   "dependencies": {
-    "@actions/core": "^1.2.4",
-    "aws-sdk": "^2.725.0"
+    "@actions/core": "1.10.0",
+    "aws-sdk": "2.1237.0"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.7",
-    "@types/node": "^14.0.26",
-    "@typescript-eslint/eslint-plugin": "^3.7.1",
-    "@typescript-eslint/parser": "^3.7.1",
-    "@zeit/ncc": "^0.22.3",
-    "eslint": "^7.5.0",
-    "eslint-config-prettier": "^6.10.1",
-    "eslint-plugin-github": "^4.1.1",
-    "eslint-plugin-jest": "^23.18.2",
-    "eslint-plugin-prettier": "^3.1.4",
-    "husky": "^4.2.5",
-    "jest": "^26.1.0",
-    "jest-circus": "^26.2.2",
-    "js-yaml": "^3.14.0",
-    "lint-staged": "^10.2.11",
-    "prettier": "^2.0.5",
-    "ts-jest": "^26.1.4",
-    "typescript": "^3.9.7"
+    "@types/jest": "26.0.7",
+    "@types/node": "14.0.26",
+    "@typescript-eslint/eslint-plugin": "3.7.1",
+    "@typescript-eslint/parser": "3.7.1",
+    "@zeit/ncc": "0.22.3",
+    "eslint": "7.5.0",
+    "eslint-config-prettier": "6.10.1",
+    "eslint-plugin-github": "4.1.1",
+    "eslint-plugin-jest": "23.18.2",
+    "eslint-plugin-prettier": "3.1.4",
+    "jest": "26.1.0",
+    "jest-circus": "26.2.2",
+    "js-yaml": "3.14.0",
+    "lint-staged": "10.2.11",
+    "prettier": "2.0.5",
+    "ts-jest": "26.1.4",
+    "typescript": "3.9.7"
   }
 }

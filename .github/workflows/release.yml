@@ -5,13 +5,17 @@ on:
 
 name: Create Release
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   build:
     name: Create Release
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-ubuntu-22.04
     steps:
       - name: Checkout code
-        uses: actions/checkout@master
+        uses: actions/checkout@v3
       - name: Create Release
         id: create_release
         uses: actions/create-release@latest
