@@ -210,7 +210,11 @@ describe('Deploy CloudFormation Stack', () => {
       EnableTerminationProtection: false
     })
     expect(core.setOutput).toHaveBeenCalledTimes(1)
-    expect(core.setOutput).toHaveBeenNthCalledWith(1, 'stack-id', mockStackId)
+    expect(core.setOutput).toHaveBeenNthCalledWith(
+      1,
+      'MockStack:stack-id',
+      mockStackId
+    )
   })
 
   test('sets the stack outputs as action outputs', async () => {
@@ -275,9 +279,21 @@ describe('Deploy CloudFormation Stack', () => {
       EnableTerminationProtection: false
     })
     expect(core.setOutput).toHaveBeenCalledTimes(3)
-    expect(core.setOutput).toHaveBeenNthCalledWith(1, 'stack-id', mockStackId)
-    expect(core.setOutput).toHaveBeenNthCalledWith(2, 'hello', 'world')
-    expect(core.setOutput).toHaveBeenNthCalledWith(3, 'foo', 'bar')
+    expect(core.setOutput).toHaveBeenNthCalledWith(
+      1,
+      'MockStack:stack-id',
+      mockStackId
+    )
+    expect(core.setOutput).toHaveBeenNthCalledWith(
+      2,
+      'MockStack:output:hello',
+      'world'
+    )
+    expect(core.setOutput).toHaveBeenNthCalledWith(
+      3,
+      'MockStack:output:foo',
+      'bar'
+    )
   })
 
   test('deploys the stack with template url', async () => {
@@ -317,7 +333,11 @@ describe('Deploy CloudFormation Stack', () => {
       EnableTerminationProtection: false
     })
     expect(core.setOutput).toHaveBeenCalledTimes(1)
-    expect(core.setOutput).toHaveBeenNthCalledWith(1, 'stack-id', mockStackId)
+    expect(core.setOutput).toHaveBeenNthCalledWith(
+      1,
+      'MockStack:stack-id',
+      mockStackId
+    )
   })
 
   test('deploys the stack with termination protection', async () => {
@@ -358,7 +378,11 @@ describe('Deploy CloudFormation Stack', () => {
       EnableTerminationProtection: true
     })
     expect(core.setOutput).toHaveBeenCalledTimes(1)
-    expect(core.setOutput).toHaveBeenNthCalledWith(1, 'stack-id', mockStackId)
+    expect(core.setOutput).toHaveBeenNthCalledWith(
+      1,
+      'MockStack:stack-id',
+      mockStackId
+    )
   })
 
   test('deploys the stack with disabling rollback', async () => {
@@ -399,7 +423,11 @@ describe('Deploy CloudFormation Stack', () => {
       EnableTerminationProtection: false
     })
     expect(core.setOutput).toHaveBeenCalledTimes(1)
-    expect(core.setOutput).toHaveBeenNthCalledWith(1, 'stack-id', mockStackId)
+    expect(core.setOutput).toHaveBeenNthCalledWith(
+      1,
+      'MockStack:stack-id',
+      mockStackId
+    )
   })
 
   test('deploys the stack with Notification ARNs', async () => {
@@ -445,7 +473,11 @@ describe('Deploy CloudFormation Stack', () => {
       EnableTerminationProtection: false
     })
     expect(core.setOutput).toHaveBeenCalledTimes(1)
-    expect(core.setOutput).toHaveBeenNthCalledWith(1, 'stack-id', mockStackId)
+    expect(core.setOutput).toHaveBeenNthCalledWith(
+      1,
+      'MockStack:stack-id',
+      mockStackId
+    )
   })
 
   test('deploys the stack with Role ARN', async () => {
@@ -487,7 +519,11 @@ describe('Deploy CloudFormation Stack', () => {
       EnableTerminationProtection: false
     })
     expect(core.setOutput).toHaveBeenCalledTimes(1)
-    expect(core.setOutput).toHaveBeenNthCalledWith(1, 'stack-id', mockStackId)
+    expect(core.setOutput).toHaveBeenNthCalledWith(
+      1,
+      'MockStack:stack-id',
+      mockStackId
+    )
   })
 
   test('deploys the stack with tags', async () => {
@@ -529,7 +565,11 @@ describe('Deploy CloudFormation Stack', () => {
       EnableTerminationProtection: false
     })
     expect(core.setOutput).toHaveBeenCalledTimes(1)
-    expect(core.setOutput).toHaveBeenNthCalledWith(1, 'stack-id', mockStackId)
+    expect(core.setOutput).toHaveBeenNthCalledWith(
+      1,
+      'MockStack:stack-id',
+      mockStackId
+    )
   })
 
   test('deploys the stack with timeout', async () => {
@@ -571,7 +611,134 @@ describe('Deploy CloudFormation Stack', () => {
       EnableTerminationProtection: false
     })
     expect(core.setOutput).toHaveBeenCalledTimes(1)
-    expect(core.setOutput).toHaveBeenNthCalledWith(1, 'stack-id', mockStackId)
+    expect(core.setOutput).toHaveBeenNthCalledWith(
+      1,
+      'MockStack:stack-id',
+      mockStackId
+    )
+  })
+
+  test('deploys multiple stacks', async () => {
+    const inputs: Inputs = {
+      name: 'MockStack\nMockStack2',
+      template:
+        'https://s3.amazonaws.com/templates/myTemplate.template?versionId=123ab1cdeKdOW5IH4GAcYbEngcpTJTDW\nhttps://s3.amazonaws.com/templates/myTemplate.template?versionId=123ab1cdeKdOW5IH4GAcYbEngcpTJTDW2',
+      capabilities: 'CAPABILITY_IAM',
+      'parameter-overrides': 'AdminEmail=no-reply@amazon.com\n',
+      'no-fail-on-empty-changeset': '1',
+      concurrency: '1' // run order is not predictable/testable for values > 1
+    }
+
+    jest.spyOn(core, 'getInput').mockImplementation((name: string) => {
+      return inputs[name]
+    })
+
+    mockDescribeStacks.mockReset()
+    mockDescribeStacks
+      .mockImplementationOnce(() => {
+        const err: aws.AWSError = new Error(
+          'The stack does not exist.'
+        ) as aws.AWSError
+        err.code = 'ValidationError'
+        throw err
+      })
+      .mockImplementationOnce(() => {
+        return {
+          promise(): Promise<aws.CloudFormation.Types.DescribeStacksOutput> {
+            return Promise.resolve({
+              Stacks: [
+                {
+                  StackId: mockStackId,
+                  Tags: [],
+                  Outputs: [],
+                  StackStatusReason: '',
+                  CreationTime: new Date('2013-08-23T01:02:15.422Z'),
+                  Capabilities: [],
+                  StackName: 'MockStack',
+                  StackStatus: 'CREATE_COMPLETE'
+                }
+              ]
+            })
+          }
+        }
+      })
+      .mockImplementationOnce(() => {
+        const err: aws.AWSError = new Error(
+          'The stack does not exist.'
+        ) as aws.AWSError
+        err.code = 'ValidationError'
+        throw err
+      })
+      .mockImplementationOnce(() => {
+        return {
+          promise(): Promise<aws.CloudFormation.Types.DescribeStacksOutput> {
+            return Promise.resolve({
+              Stacks: [
+                {
+                  StackId: mockStackId,
+                  Tags: [],
+                  Outputs: [],
+                  StackStatusReason: '',
+                  CreationTime: new Date('2013-08-23T01:02:15.422Z'),
+                  Capabilities: [],
+                  StackName: 'MockStack2',
+                  StackStatus: 'CREATE_COMPLETE'
+                }
+              ]
+            })
+          }
+        }
+      })
+
+    await run()
+
+    expect(core.setFailed).toHaveBeenCalledTimes(0)
+    expect(mockDescribeStacks).toHaveBeenCalledTimes(4)
+    expect(mockDescribeStacks).toHaveBeenNthCalledWith(1, {
+      StackName: 'MockStack'
+    })
+    expect(mockDescribeStacks).toHaveBeenNthCalledWith(2, {
+      StackName: mockStackId
+    })
+    expect(mockDescribeStacks).toHaveBeenNthCalledWith(3, {
+      StackName: 'MockStack2'
+    })
+    expect(mockDescribeStacks).toHaveBeenNthCalledWith(4, {
+      StackName: mockStackId
+    })
+    expect(mockCreateStack).toHaveBeenCalledTimes(2)
+    expect(mockCreateStack).toHaveBeenNthCalledWith(1, {
+      StackName: 'MockStack',
+      TemplateURL:
+        'https://s3.amazonaws.com/templates/myTemplate.template?versionId=123ab1cdeKdOW5IH4GAcYbEngcpTJTDW',
+      TemplateBody: undefined,
+      Capabilities: ['CAPABILITY_IAM'],
+      Parameters: [
+        { ParameterKey: 'AdminEmail', ParameterValue: 'no-reply@amazon.com' }
+      ],
+      DisableRollback: false,
+      EnableTerminationProtection: false
+    })
+    expect(mockCreateStack).toHaveBeenNthCalledWith(2, {
+      StackName: 'MockStack2',
+      TemplateURL:
+        'https://s3.amazonaws.com/templates/myTemplate.template?versionId=123ab1cdeKdOW5IH4GAcYbEngcpTJTDW2',
+      TemplateBody: undefined,
+      Capabilities: ['CAPABILITY_IAM'],
+      DisableRollback: false,
+      EnableTerminationProtection: false
+    })
+    expect(core.setOutput).toHaveBeenCalledTimes(2)
+    expect(core.setOutput).toHaveBeenNthCalledWith(
+      1,
+      'MockStack:stack-id',
+      mockStackId
+    )
+    expect(core.setOutput).toHaveBeenNthCalledWith(
+      2,
+      'MockStack2:stack-id',
+      mockStackId
+    )
   })
 
   test('successfully update the stack', async () => {

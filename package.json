@@ -7,7 +7,7 @@
     "build": "tsc",
     "pack": "ncc build",
     "test": "DEBUG=jest eslint **/*.ts && jest --coverage --verbose",
-    "all": "npm run build && npm run precommit && npm run pack && npm test"
+    "fix": "eslint **/*.ts --fix"
   },
   "repository": {
     "type": "git",
@@ -20,10 +20,12 @@
     "JavaScript"
   ],
   "author": "AWS",
-  "contributors": [{
-    "name": "Michael Wittig",
-    "email" : "michael@widdix.de"
-  }],
+  "contributors": [
+    {
+      "name": "Michael Wittig",
+      "email": "michael@widdix.de"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/widdix/aws-cloudformation-github-deploy/issues"
@@ -31,7 +33,8 @@
   "homepage": "https://github.com/widdix/aws-cloudformation-github-deploy#readme",
   "dependencies": {
     "@actions/core": "1.10.0",
-    "aws-sdk": "2.1237.0"
+    "aws-sdk": "2.1237.0",
+    "p-limit": "3.1.0"
   },
   "devDependencies": {
     "@types/jest": "29.2.0",

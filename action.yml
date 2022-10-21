@@ -49,9 +49,15 @@ inputs:
     description: "Whether to enable termination protection on the specified stack. Defaults to '0' (terminated protection will be disabled) This input is only used for stack creation, not for stack update"
     required: false
     default: "0"
+  concurrency:
+    description: "Maximum number of stacks worked on in parallel"
+    required: false
+    default: "5"
 outputs:
-  stack-id:
-    description: "The id of the deployed stack. In addition, any outputs declared in the deployed CloudFormation stack will also be set as outputs for the action, e.g. if the stack has a stack output named 'foo', this action will also have an output named 'foo'."
+  stack-name:stack-id:
+    description: "The id of the deployed stack (replace stack-name with the name of your stack). "
+  stack-name:output:logical-id:
+    description: "The outputs of the deployed stack (replace stack-name with the name of your stack and logical-id with the logical ID of your output)"
 runs:
-  using: "node12"
+  using: "node16"
   main: "dist/index.js"
