@@ -54,10 +54,12 @@ export async function task(
   let templateUrl
 
   if (isUrl(options.template)) {
-    core.debug('Using CloudFormation Stack from Amazon S3 Bucket')
+    core.debug(
+      `${options.stackName}: Using CloudFormation Stack from Amazon S3 Bucket`
+    )
     templateUrl = options.template
   } else {
-    core.debug('Loading CloudFormation Stack template')
+    core.debug(`${options.stackName}: Loading CloudFormation Stack template`)
     const templateFilePath = path.isAbsolute(options.template)
       ? options.template
       : path.join(GITHUB_WORKSPACE, options.template)
@@ -298,6 +300,9 @@ export async function run(): Promise<void> {
           noEmptyChangeSet: pickOption(noEmptyChangeSet, i),
           noExecuteChageSet: pickOption(noExecuteChageSet, i),
           noDeleteFailedChangeSet: pickOption(noDeleteFailedChangeSet, i)
+        }).catch(err => {
+          core.error(`${stackName[i]}: Error`)
+          throw err
         })
       )
     )

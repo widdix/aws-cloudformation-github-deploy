@@ -24,7 +24,7 @@ export async function cleanupChangeSet(
     .promise()
 
   if (changeSetStatus.Status === 'FAILED') {
-    core.debug('Deleting failed Change Set')
+    core.debug(`${stack.StackName}: Deleting failed Change Set`)
 
     if (noDeleteFailedChangeSet === false) {
       await cfn
@@ -58,11 +58,13 @@ export async function updateStack(
   noExecuteChageSet?: boolean,
   noDeleteFailedChangeSet?: boolean
 ): Promise<string | undefined> {
-  core.debug('Creating CloudFormation Change Set')
+  core.debug(`${stack.StackName}: Creating CloudFormation Change Set`)
   await cfn.createChangeSet(params).promise()
 
   try {
-    core.debug('Waiting for CloudFormation Change Set creation')
+    core.debug(
+      `${stack.StackName}: Waiting for CloudFormation Change Set creation`
+    )
     await cfn
       .waitFor('changeSetCreateComplete', {
         ChangeSetName: params.ChangeSetName,
@@ -80,11 +82,11 @@ export async function updateStack(
   }
 
   if (noExecuteChageSet === true) {
-    core.debug('Not executing the change set')
+    core.debug(`${stack.StackName}: Not executing the change set`)
     return stack.StackId
   }
 
-  core.debug('Executing CloudFormation change set')
+  core.debug(`${stack.StackName}: Executing CloudFormation change set`)
   await cfn
     .executeChangeSet({
       ChangeSetName: params.ChangeSetName,
@@ -92,7 +94,7 @@ export async function updateStack(
     })
     .promise()
 
-  core.debug('Updating CloudFormation stack')
+  core.debug(`${stack.StackName}: Updating CloudFormation stack`)
   await cfn
     .waitFor('stackUpdateComplete', { StackName: stack.StackId })
     .promise()
@@ -129,7 +131,7 @@ export async function deployStack(
   const stack = await getStack(cfn, params.StackName)
 
   if (!stack) {
-    core.debug(`Creating CloudFormation Stack`)
+    core.debug(`${params.StackName}: Creating CloudFormation Stack`)
 
     const stack = await cfn.createStack(params).promise()
     await cfn
