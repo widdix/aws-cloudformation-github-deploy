@@ -1,8 +1,8 @@
-name: 'AWS CloudFormation "Deploy CloudFormation Stack" Action for GitHub Actions'
-description: "Deploys a AWS CloudFormation stack"
+name: "Deploy CloudFormation Stack(s), a cloudonaut.io action"
+description: "Deploys AWS CloudFormation stacks"
 branding:
   icon: "cloud"
-  color: "orange"
+  color: "blue"
 inputs:
   name:
     description: "The name of the CloudFormation stack"
@@ -11,26 +11,26 @@ inputs:
     description: "The path or URL to the CloudFormation template"
     required: true
   capabilities:
-    description: "The comma-delimited list of stack template capabilities to acknowledge. Defaults to 'CAPABILITY_IAM'"
+    description: "The comma-delimited list of stack template capabilities to acknowledge. Defaults to CAPABILITY_IAM"
     required: false
     default: "CAPABILITY_IAM"
   parameter-overrides:
     description: 'The parameters to override in the stack inputs. You can pass a comma-delimited list or a file URL. Comma-delimited list has each entry formatted as <ParameterName>=<ParameterValue>. A JSON file can be a local file with a "file://" prefix. The file content should look like: [ { "ParameterKey": "KeyPairName", "ParameterValue": "MyKey" }]'
     required: false
   no-execute-changeset:
-    description: "Indicates whether to execute to the change set or have it reviewed. Default to '0' (will execute the change set)"
+    description: "Indicates whether to execute to the change set or have it reviewed. Defaults to 0 (execute the change set)"
     required: false
     default: "0"
   no-delete-failed-changeset:
-    description: "Indicates whether to delete to a failed change set. Default to '0' (will delete the failed changeset)"
+    description: "Indicates whether to delete to a failed change set. Defaults to 0 (delete the failed changeset)"
     required: false
     default: "0"
   no-fail-on-empty-changeset:
-    description: "If the CloudFormation change set is empty, do not fail. Defaults to '1' (will not fail on empty change set)"
+    description: "If the CloudFormation change set is empty, do not fail. Defaults to 1 (not fail on empty change set)"
     required: false
     default: "1"
   disable-rollback:
-    description: "Disable rollback of the stack if stack creation fails. Defaults to '0' (will rollback if stack creation fails). This input is only used for stack creation, not for stack update"
+    description: "Disable rollback of the stack if stack creation fails. Defaults to 0 (rollback if stack creation fails). This input is only used for stack creation, not for stack update"
     required: false
     default: "0"
   timeout-in-minutes:
@@ -46,11 +46,11 @@ inputs:
     description: 'Key-value pairs to associate with this stack. This input should be JSON-formatted, for example [ { "Key": "string", "Value": "string" } ]'
     required: false
   termination-protection:
-    description: "Whether to enable termination protection on the specified stack. Defaults to '0' (terminated protection will be disabled) This input is only used for stack creation, not for stack update"
+    description: "Whether to enable termination protection on the specified stack. Defaults to 0 (terminated protection disabled). This input is only used for stack creation, not for stack update"
     required: false
     default: "0"
   concurrency:
-    description: "Maximum number of stacks worked on in parallel"
+    description: "Maximum number of stacks created/updated in parallel. Defaults to 5"
     required: false
     default: "5"
 outputs:

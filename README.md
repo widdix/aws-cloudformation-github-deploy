@@ -1,4 +1,4 @@
-## AWS CloudFormation "Deploy CloudFormation Stack" Action for GitHub Actions
+## Deploy CloudFormation Stack(s) for GitHub Actions
 
 Deploys AWS CloudFormation stacks.
 
