@@ -44,7 +44,7 @@ export async function task(
     terminationProtection?: boolean
     parameterOverrides?: string
     noEmptyChangeSet?: boolean
-    noExecuteChageSet?: boolean
+    noExecuteChangeSet?: boolean
     noDeleteFailedChangeSet?: boolean
   }
 ): Promise<void> {
@@ -97,7 +97,7 @@ export async function task(
     cfn,
     params,
     options.noEmptyChangeSet,
-    options.noExecuteChageSet,
+    options.noExecuteChangeSet,
     options.noDeleteFailedChangeSet
   )
   core.setOutput(`${options.stackName}_stack-id`, stackId || 'UNKNOWN')
@@ -153,7 +153,7 @@ export async function run(): Promise<void> {
         required: false
       })
     ).map(x => !!+x)
-    const noExecuteChageSet = parseMultiline(
+    const noExecuteChangeSet = parseMultiline(
       core.getInput('no-execute-changeset', {
         required: false
       })
@@ -211,8 +211,8 @@ export async function run(): Promise<void> {
       )
     }
     if (
-      noExecuteChageSet.length !== 1 &&
-      noExecuteChageSet.length != stackName.length
+      noExecuteChangeSet.length !== 1 &&
+      noExecuteChangeSet.length != stackName.length
     ) {
       throw new Error(
         'number input no-execute-changeset lines must match name lines or must be a single line'
@@ -298,7 +298,7 @@ export async function run(): Promise<void> {
           terminationProtection: pickOption(terminationProtection, i),
           parameterOverrides: pickOption(parameterOverrides, i),
           noEmptyChangeSet: pickOption(noEmptyChangeSet, i),
-          noExecuteChageSet: pickOption(noExecuteChageSet, i),
+          noExecuteChangeSet: pickOption(noExecuteChangeSet, i),
           noDeleteFailedChangeSet: pickOption(noDeleteFailedChangeSet, i)
         }).catch(err => {
           core.error(`${stackName[i]}: Error`)
