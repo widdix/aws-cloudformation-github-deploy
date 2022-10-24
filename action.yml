@@ -54,9 +54,9 @@ inputs:
     required: false
     default: "5"
 outputs:
-  stack-name:stack-id:
+  stack-name_stack-id:
     description: "The id of the deployed stack (replace stack-name with the name of your stack). "
-  stack-name:output:logical-id:
+  stack-name_output_logical-id:
     description: "The outputs of the deployed stack (replace stack-name with the name of your stack and logical-id with the logical ID of your output)"
 runs:
   using: "node16"

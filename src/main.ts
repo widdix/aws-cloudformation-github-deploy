@@ -100,12 +100,12 @@ export async function task(
     options.noExecuteChageSet,
     options.noDeleteFailedChangeSet
   )
-  core.setOutput(`${options.stackName}:stack-id`, stackId || 'UNKNOWN')
+  core.setOutput(`${options.stackName}_stack-id`, stackId || 'UNKNOWN')
 
   if (stackId) {
     const outputs = await getStackOutputs(cfn, stackId)
     for (const [logicalId, value] of outputs) {
-      core.setOutput(`${options.stackName}:output:${logicalId}`, value)
+      core.setOutput(`${options.stackName}_output_${logicalId}`, value)
     }
   }
 }

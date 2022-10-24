@@ -212,7 +212,7 @@ describe('Deploy CloudFormation Stack', () => {
     expect(core.setOutput).toHaveBeenCalledTimes(1)
     expect(core.setOutput).toHaveBeenNthCalledWith(
       1,
-      'MockStack:stack-id',
+      'MockStack_stack-id',
       mockStackId
     )
   })
@@ -281,17 +281,17 @@ describe('Deploy CloudFormation Stack', () => {
     expect(core.setOutput).toHaveBeenCalledTimes(3)
     expect(core.setOutput).toHaveBeenNthCalledWith(
       1,
-      'MockStack:stack-id',
+      'MockStack_stack-id',
       mockStackId
     )
     expect(core.setOutput).toHaveBeenNthCalledWith(
       2,
-      'MockStack:output:hello',
+      'MockStack_output_hello',
       'world'
     )
     expect(core.setOutput).toHaveBeenNthCalledWith(
       3,
-      'MockStack:output:foo',
+      'MockStack_output_foo',
       'bar'
     )
   })
@@ -335,7 +335,7 @@ describe('Deploy CloudFormation Stack', () => {
     expect(core.setOutput).toHaveBeenCalledTimes(1)
     expect(core.setOutput).toHaveBeenNthCalledWith(
       1,
-      'MockStack:stack-id',
+      'MockStack_stack-id',
       mockStackId
     )
   })
@@ -380,7 +380,7 @@ describe('Deploy CloudFormation Stack', () => {
     expect(core.setOutput).toHaveBeenCalledTimes(1)
     expect(core.setOutput).toHaveBeenNthCalledWith(
       1,
-      'MockStack:stack-id',
+      'MockStack_stack-id',
       mockStackId
     )
   })
@@ -425,7 +425,7 @@ describe('Deploy CloudFormation Stack', () => {
     expect(core.setOutput).toHaveBeenCalledTimes(1)
     expect(core.setOutput).toHaveBeenNthCalledWith(
       1,
-      'MockStack:stack-id',
+      'MockStack_stack-id',
       mockStackId
     )
   })
@@ -475,7 +475,7 @@ describe('Deploy CloudFormation Stack', () => {
     expect(core.setOutput).toHaveBeenCalledTimes(1)
     expect(core.setOutput).toHaveBeenNthCalledWith(
       1,
-      'MockStack:stack-id',
+      'MockStack_stack-id',
       mockStackId
     )
   })
@@ -521,7 +521,7 @@ describe('Deploy CloudFormation Stack', () => {
     expect(core.setOutput).toHaveBeenCalledTimes(1)
     expect(core.setOutput).toHaveBeenNthCalledWith(
       1,
-      'MockStack:stack-id',
+      'MockStack_stack-id',
       mockStackId
     )
   })
@@ -567,7 +567,7 @@ describe('Deploy CloudFormation Stack', () => {
     expect(core.setOutput).toHaveBeenCalledTimes(1)
     expect(core.setOutput).toHaveBeenNthCalledWith(
       1,
-      'MockStack:stack-id',
+      'MockStack_stack-id',
       mockStackId
     )
   })
@@ -613,7 +613,7 @@ describe('Deploy CloudFormation Stack', () => {
     expect(core.setOutput).toHaveBeenCalledTimes(1)
     expect(core.setOutput).toHaveBeenNthCalledWith(
       1,
-      'MockStack:stack-id',
+      'MockStack_stack-id',
       mockStackId
     )
   })
@@ -731,12 +731,12 @@ describe('Deploy CloudFormation Stack', () => {
     expect(core.setOutput).toHaveBeenCalledTimes(2)
     expect(core.setOutput).toHaveBeenNthCalledWith(
       1,
-      'MockStack:stack-id',
+      'MockStack_stack-id',
       mockStackId
     )
     expect(core.setOutput).toHaveBeenNthCalledWith(
       2,
-      'MockStack2:stack-id',
+      'MockStack2_stack-id',
       mockStackId
     )
   })
