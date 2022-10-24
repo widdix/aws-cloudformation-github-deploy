@@ -4,8 +4,7 @@
   "description": "Deploys a AWS CloudFormation stack",
   "main": "lib/main.js",
   "scripts": {
-    "build": "tsc",
-    "pack": "ncc build",
+    "dist": "tsc && ncc build",
     "test": "DEBUG=jest eslint **/*.ts && jest --coverage --verbose",
     "fix": "eslint **/*.ts --fix"
   },

@@ -46,7 +46,7 @@ To dedploy multiple stacks in parallel using the same settings for all stacks:
       myStack1.yaml
       myStack2.yaml
       myStack3.yaml
-    no-fail-on-empty-changeset: "1" # applies to all three stacks
+    disable-rollback: "1" # applies to all three stacks
 ```
 
 To dedploy multiple stacks in parallel passing in no values for a specific stack using a empty line:
@@ -69,7 +69,7 @@ To dedploy multiple stacks in parallel passing in no values for a specific stack
       MyParam1=myValue
 ```
 
-The action can be passed a CloudFormation Stack `name` and a `template` file. The `template` file can be a local file existing in the working directory, or a URL to template that exists in an [Amazon S3](https://aws.amazon.com/s3/) bucket. It will create the Stack if it does not exist, or create a [Change Set](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html) to update the Stack. An update fails by default when the Change Set is empty. Setting `no-fail-on-empty-changeset: "1"` will override this behavior and not throw an error.
+The action can be passed a CloudFormation Stack `name` and a `template` file. The `template` file can be a local file existing in the working directory, or a URL to template that exists in an [Amazon S3](https://aws.amazon.com/s3/) bucket. It will create the Stack if it does not exist, or create a [Change Set](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html) to update the Stack. 
 
 See [action.yml](action.yml) for the full documentation for this action's inputs and outputs.
 
@@ -105,5 +105,5 @@ jobs:
         parameter-overrides: |
           MyParam1=myValue,MyParam2=${{ secrets.MY_SECRET_VALUE }}
           MyParam1=myValue
-        no-fail-on-empty-changeset: "1" # applies to all two stacks
+        disable-rollback: "1" # applies to all two stacks
 ```

@@ -26,9 +26,9 @@ inputs:
     required: false
     default: "0"
   no-fail-on-empty-changeset:
-    description: "If the CloudFormation change set is empty, do not fail. Defaults to '0' (will fail on empty change set)"
+    description: "If the CloudFormation change set is empty, do not fail. Defaults to '1' (will not fail on empty change set)"
     required: false
-    default: "0"
+    default: "1"
   disable-rollback:
     description: "Disable rollback of the stack if stack creation fails. Defaults to '0' (will rollback if stack creation fails). This input is only used for stack creation, not for stack update"
     required: false
