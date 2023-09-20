@@ -9,7 +9,7 @@ defaults:
 jobs:
   check:
     name: Run Unit Tests
-    runs-on: ubuntu-22.04
+    runs-on: ['hyperenv', 'medium']
     steps:
       - name: Checkout
         uses: actions/checkout@v3
