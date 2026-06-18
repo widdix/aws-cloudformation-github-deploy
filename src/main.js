@@ -1,9 +1,9 @@
 import pLimit from 'p-limit'
 import * as path from 'path'
 import * as core from '@actions/core'
-import * as aws from 'aws-sdk'
+import { CloudFormationClient } from '@aws-sdk/client-cloudformation'
 import * as fs from 'fs'
-import { deployStack, getStackOutputs } from './deploy'
+import { deployStack, getStackOutputs } from './deploy.js'
 import {
   isUrl,
   parseTags,
@@ -11,43 +11,14 @@ import {
   parseNumber,
   parseARNs,
   parseParameters
-} from './utils'
-
-export type CreateStackInput = aws.CloudFormation.Types.CreateStackInput
-export type CreateChangeSetInput = aws.CloudFormation.Types.CreateChangeSetInput
-export type InputNoFailOnEmptyChanges = '1' | '0'
-export type InputCapabilities =
-  | 'CAPABILITY_IAM'
-  | 'CAPABILITY_NAMED_IAM'
-  | 'CAPABILITY_AUTO_EXPAND'
-
-export type Inputs = {
-  [key: string]: string
-}
+} from './utils.js'
 
 // The custom client configuration for the CloudFormation clients.
 const clientConfiguration = {
   customUserAgent: 'aws-cloudformation-github-deploy-for-github-actions'
 }
 
-export async function task(
-  cfn: aws.CloudFormation,
-  options: {
-    template: string
-    stackName: string
-    capabilities?: string
-    roleARN?: string
-    notificationARNs?: string[]
-    disableRollback?: boolean
-    timeoutInMinutes?: number
-    tags?: aws.CloudFormation.Tags
-    terminationProtection?: boolean
-    parameterOverrides?: string
-    noEmptyChangeSet?: boolean
-    noExecuteChangeSet?: boolean
-    noDeleteFailedChangeSet?: boolean
-  }
-): Promise<void> {
+export async function task(cfn, options) {
   const { GITHUB_WORKSPACE = __dirname } = process.env
   // Setup CloudFormation Stack
   let templateBody
@@ -67,7 +38,7 @@ export async function task(
   }
 
   // CloudFormation Stack Parameter for the creation or update
-  const params: CreateStackInput = {
+  const params = {
     StackName: options.stackName,
     ...(options.roleARN !== undefined && { RoleARN: options.roleARN }),
     ...(options.notificationARNs !== undefined && {
@@ -110,7 +81,7 @@ export async function task(
   }
 }
 
-function pickOption<Type>(arr: Type[], i: number): Type | undefined {
+function pickOption(arr, i) {
   if (arr.length === 0) {
     return undefined
   }
@@ -121,7 +92,7 @@ function pickOption<Type>(arr: Type[], i: number): Type | undefined {
 }
 
 // we don't use core.getMultilineInput() because it filters out empty lines
-function parseMultiline(str: string): string[] {
+function parseMultiline(str) {
   if (str === undefined) {
     // some tests pass undefined instead of an empty string as core.getInput() would do
     return ['']
@@ -129,9 +100,9 @@ function parseMultiline(str: string): string[] {
   return str.split('\n')
 }
 
-export async function run(): Promise<void> {
+export async function run() {
   try {
-    const cfn = new aws.CloudFormation({ ...clientConfiguration })
+    const cfn = new CloudFormationClient({ ...clientConfiguration })
 
     // Get inputs
     const template = parseMultiline(
@@ -311,13 +282,7 @@ export async function run(): Promise<void> {
   } catch (err) {
     if (err instanceof Error || typeof err === 'string') {
       core.setFailed(err)
-      // @ts-ignore
       console.debug(err.stack)
     }
   }
-}
-
-/* istanbul ignore next */
-if (require.main === module) {
-  run()
 }

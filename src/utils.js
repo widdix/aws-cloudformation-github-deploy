@@ -1,48 +1,46 @@
-import * as aws from 'aws-sdk'
 import * as fs from 'fs'
-import { Parameter } from 'aws-sdk/clients/cloudformation'
 
-export function isUrl(s: string): boolean {
+export function isUrl(s) {
   let url
 
   try {
     url = new URL(s)
-  } catch (_) {
+  } catch {
     return false
   }
 
   return url.protocol === 'https:'
 }
 
-export function parseTags(s: string): aws.CloudFormation.Tags | undefined {
+export function parseTags(s) {
   let json
 
   try {
     json = JSON.parse(s)
-  } catch (_) {}
+  } catch {}
 
   return json
 }
 
-export function parseARNs(s: string): string[] | undefined {
+export function parseARNs(s) {
   return s?.length > 0 ? s.split(',') : undefined
 }
 
-export function parseString(s: string): string | undefined {
+export function parseString(s) {
   return s?.length > 0 ? s : undefined
 }
 
-export function parseNumber(s: string): number | undefined {
+export function parseNumber(s) {
   return parseInt(s) || undefined
 }
 
-export function parseParameters(parameterOverrides: string): Parameter[] {
+export function parseParameters(parameterOverrides) {
   if (parameterOverrides.startsWith('file://')) {
     const path = new URL(parameterOverrides)
     const rawParameters = fs.readFileSync(path, 'utf-8')
     return JSON.parse(rawParameters)
   } else {
-    const parameters = new Map<string, string>()
+    const parameters = new Map()
     parameterOverrides.split(',').forEach(parameter => {
       const [key, value] = parameter.trim().split('=')
       let param = parameters.get(key)
